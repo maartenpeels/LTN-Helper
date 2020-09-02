@@ -57,7 +57,7 @@ data.raw["gui-style"].default["ltnc_misc_slot_empty"] = {
 
 data.raw["gui-style"].default["ltnc_misc_slot_selected"] = {
   type   = "button_style",
-  parent = "selected_logistic_slot_button",
+  parent = "slot_button",
 }
 
 -- [[ NETWORK STYLES ]] --
