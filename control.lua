@@ -8,10 +8,10 @@ global = global or {}
 global.default_visibility = global.default_visibility or {}
 global.ltn_version_notice = global.ltn_version_notice or false
 
-MOD_NAME    = "LTN_Combinator" 
-MOD_STRING  = "LTN Combinator"
+MOD_NAME    = "LTN_Helper" 
+MOD_STRING  = "LTN Helper"
 MOD_TOKEN   = "LTNC"
-MOD_VERSION = "0.5.0"
+MOD_VERSION = "0.6.3"
 
 LTN_MOD_NAME    = "LogisticTrainNetwork"
 LTN_MOD_VERSION = "1.12.0"
@@ -20,14 +20,14 @@ print, dlog = require "scripts.logger"()
 
 
 local config = require "config"
-local events = require "scripts.ltnc-events"
-local ltnc   = require "scripts.ltnc"
-ltnc.gui        = require "scripts.ltnc-gui"
+local events = require "scripts.ltnh-events"
+local ltnh   = require "scripts.ltnh"
+ltnh.gui        = require "scripts.ltnh-gui"
 
-local network_config  = require "scripts.ltnc-networkconfig"
+local network_config  = require "scripts.ltnh-networkconfig"
 
-ltnc.event_map(events)
-ltnc.gui.event_map(events)
+ltnh.event_map(events)
+ltnh.gui.event_map(events)
 network_config.event_map(events)
 
 --[[ ----------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ local function mod_ltn_check()
   local ltn_version = game.active_mods[LTN_MOD_NAME]
   
   if not ltn_version or ltn_version == "" then
-    print("LogisticTrainNetwork is required to use LTN Combinator.")
+    print("LogisticTrainNetwork is required to use LTN Helper.")
     global.vanilla_gui = true
     return false
   end
@@ -60,7 +60,7 @@ local function mod_ltn_check()
     if global.ltn_version_notice == true then return end
     
     global.ltn_version_notice = true
-    print("LogisticTrainNetwork has been updated. If you experience any conflicts disable LTN Combinator in \"Mod Settings\" and sit tight while waiting for an update.")    
+    print("LogisticTrainNetwork has been updated. If you experience any conflicts disable LTN Helper in \"Mod Settings\" and sit tight while waiting for an update.")    
   else
     global.ltn_version_notice = false
   end
@@ -76,18 +76,18 @@ remote.add_interface("ltn-combinator", {
   --  entity: any entity that is in the same green-circuit-network as the wanted ltn-combinator (required)
   --  register: registers the opened window in game.player[i].opened (optional, default true)
   --  returns a boolean, whether a combinator was opened
-  open_ltn_combinator = ltnc.open_combinator,
+  open_ltn_combinator = ltnh.open_combinator,
   
   -- Usage: result = remote.call("ltn-combinator", "close_ltn_combinator", player_index (integer))
   --  player_index: (required)
   --
   --  Calling this interface is only required if a ltn-combinator was previously opened with register = false.
   --  Use this method to keep your own window open.
-  close_ltn_combinator = ltnc.close_combinator
+  close_ltn_combinator = ltnh.close_combinator
 })
 
 -- debugging tool for remote call testing
-local function ltnc_remote_open(event)
+local function ltnh_remote_open(event)
   local entity = nil
   if game.players[event.player_index] then
     entity = game.players[event.player_index].selected
@@ -97,32 +97,32 @@ local function ltnc_remote_open(event)
   remote.call("ltn-combinator", "open_ltn_combinator", event.player_index, entity, true)
 end
 
-local function ltnc_remote_close(event)
+local function ltnh_remote_close(event)
   remote.call("ltn-combinator", "close_ltn_combinator", event.player_index)
 end
 
-local function ltnc_remote_clear(event)
+local function ltnh_remote_clear(event)
   game.players[event.player_index].gui.center.clear()
   global.gui[event.player_index].main_frame.destroy()
   global.gui[event.player_index] = nil
 end
 
-local function ltnc_open_network(event)
+local function ltnh_open_network(event)
   network_config.open(event)
 end
 
-commands.add_command("ltncopen", "Use /ltncopen while hovering an entity to open a near ltn combinator", ltnc_remote_open)
-commands.add_command("ltncclose", "Use /ltncclose to close the opened ltn combinator", ltnc_remote_close)
-commands.add_command("ltncconfig", "Use /ltncconfig to setup network icons", ltnc_open_network)
+commands.add_command("ltnhopen", "Use /ltnhopen while hovering an entity to open a near ltn combinator", ltnh_remote_open)
+commands.add_command("ltnhclose", "Use /ltnhclose to close the opened ltn combinator", ltnh_remote_close)
+commands.add_command("ltnhconfig", "Use /ltnhconfig to setup network icons", ltnh_open_network)
 
---commands.add_command("ltncclear", "Use /ltncclear to refresh uis", ltnc_remote_clear)
+--commands.add_command("ltnhclear", "Use /ltnhclear to refresh uis", ltnh_remote_clear)
 
 --[[ ----------------------------------------------------------------------------------
         MOD INITIALIZATION
 --]]
 local function mod_init()
   mod_ltn_check()
-  ltnc.mod_init()
+  ltnh.mod_init()
   network_config.mod_init()
 end
 
@@ -130,12 +130,12 @@ local function mod_configuration_changed(data)
   -- check for ltn version
   mod_ltn_check()
   
-  -- check if LTN Combinator was updated
+  -- check if LTN Helper was updated
   if data and data.mod_changes[MOD_NAME] then
     -- version number not needed yet
     -- data.mod_changes[MOD_NAME].old_version
     -- data.mod_changes[MOD_NAME].new_version
-    ltnc.mod_configuration_changed()
+    ltnh.mod_configuration_changed()
   end
 end
 
@@ -147,7 +147,7 @@ local function mod_player_joined(event)
     end
   end
   
-  ltnc.on_player_joined(event) 
+  ltnh.on_player_joined(event) 
 end
 
 -- update settings called every time and on mod_runtime_setting_changed()
@@ -212,7 +212,7 @@ local function update_settings()
   end
   
   -- populate changes (not needed anymore)
-  --ltnc.mod_settings_changed()
+  --ltnh.mod_settings_changed()
 end
 
 -- always run

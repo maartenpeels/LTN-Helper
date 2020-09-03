@@ -65,7 +65,7 @@ data:extend({
     },
         {
         type = "bool-setting",
-        name = "ltnc-upgradable",
+        name = "ltnh-upgradable",
         order = "sg",
         setting_type = "startup",
         default_value = true

@@ -7,7 +7,7 @@ Date: 2020-09-02
 Version: 0.6.2
 Date: 2020-05-01
   Bugfix:
-    - Fixed /ltncopen would crash on non-circuit-network entities
+    - Fixed /ltnhopen would crash on non-circuit-network entities
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.1
 Date: 2020-03-17
@@ -37,7 +37,7 @@ Date: 2019-09-19
 Version: 0.5.2
 Date: 2019-08-28
   Bugfix:
-    - Fixed a crash when using /ltncopen command
+    - Fixed a crash when using /ltnhopen command
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.1
 Date: 2019-08-18

@@ -1,8 +1,8 @@
 local config = {}
 
-config.ltnc_item_slot_count = 27
-config.ltnc_ltn_slot_count  = 13
-config.ltnc_misc_slot_count = 14
+config.ltnh_item_slot_count = 27
+config.ltnh_ltn_slot_count  = 13
+config.ltnh_misc_slot_count = 14
 
 config.ltn_signals = {
     -- signal_name = {default_value, slot, bounds = {min, max}}

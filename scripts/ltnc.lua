@@ -4,28 +4,28 @@
 
 require "ltn-combinator"
 
-ltnc = {
+ltnh = {
   gui = nil,
 } 
 
--- ltnc.mod_init
-ltnc.mod_init = function()
+-- ltnh.mod_init
+ltnh.mod_init = function()
   -- initialize gui
-  ltnc.gui.mod_init()
+  ltnh.gui.mod_init()
 end 
 
--- ltnc.mod_configuration_changed
-ltnc.mod_configuration_changed = function()
-  ltnc.gui.mod_configuration_changed()
+-- ltnh.mod_configuration_changed
+ltnh.mod_configuration_changed = function()
+  ltnh.gui.mod_configuration_changed()
 end
 
--- ltnc.on_player_joined
-ltnc.on_player_joined = function(event)
-   ltnc.gui.on_player_joined(event)
+-- ltnh.on_player_joined
+ltnh.on_player_joined = function(event)
+   ltnh.gui.on_player_joined(event)
 end
 
--- ltnc.on_gui_opened
-ltnc.on_gui_opened = function(event)
+-- ltnh.on_gui_opened
+ltnh.on_gui_opened = function(event)
   if not event.entity or event.entity.name ~= "ltn-combinator" then return end
   
   -- safety feature to show vannilla gui
@@ -39,29 +39,29 @@ ltnc.on_gui_opened = function(event)
   end
  
   -- open and register ltn-c window 
-  local win = ltnc.gui.open(event.player_index, obj, true)
+  local win = ltnh.gui.open(event.player_index, obj, true)
   game.players[event.player_index].opened = win
 end
 
--- ltnc.on_gui_closed
-ltnc.on_gui_closed = function(event)
-  if not event.element or event.element.name ~= "ltnc-main-container" then return end
+-- ltnh.on_gui_closed
+ltnh.on_gui_closed = function(event)
+  if not event.element or event.element.name ~= "ltnh-main-container" then return end
   if event.entity and event.entity.name == "ltn-combinator" then return end
   
-  if ltnc.gui.is_visible(event.player_index) then
-    ltnc.gui.close(event.player_index)
+  if ltnh.gui.is_visible(event.player_index) then
+    ltnh.gui.close(event.player_index)
   end
 end
 
-ltnc.event_map = function(events)
+ltnh.event_map = function(events)
   -- [[ EVENTS ]] --
-  events.map_gui_opened["ltn-combinator"] = ltnc.on_gui_opened
-  events.map_gui_closed["ltnc-main-container"] = ltnc.on_gui_closed
+  events.map_gui_opened["ltn-combinator"] = ltnh.on_gui_opened
+  events.map_gui_closed["ltnh-main-container"] = ltnh.on_gui_closed
 end
 
--- ltnc.find_combinator_in_network_tree
+-- ltnh.find_combinator_in_network_tree
 -- TODO: find green or red
-ltnc.find_combinator_in_network_tree = function(first_entity, max_depth, green_wire)
+ltnh.find_combinator_in_network_tree = function(first_entity, max_depth, green_wire)
   local id_stack     = {[first_entity.unit_number] = true}
   local entity_stack = {[first_entity.unit_number] = first_entity}
   
@@ -109,8 +109,8 @@ ltnc.find_combinator_in_network_tree = function(first_entity, max_depth, green_w
   return result
 end
 
--- ltnc.find_combinator_in_area
-ltnc.find_combinator_in_area = function(entity, max_area)
+-- ltnh.find_combinator_in_area
+ltnh.find_combinator_in_area = function(entity, max_area)
   -- TODO: support different surfaces
   local surface = game.surfaces["nauvis"]
   if not surface then return false end
@@ -127,17 +127,17 @@ ltnc.find_combinator_in_area = function(entity, max_area)
   return entities[1]
 end
 
--- ltnc.open_combinator
-ltnc.open_combinator = function(player_index, entity, register)
+-- ltnh.open_combinator
+ltnh.open_combinator = function(player_index, entity, register)
   if not global.gui[player_index] then return false end
   if not entity or not entity.valid then return false end
   if entity.type == "entity-ghost" then return false end
   
-  local combinator = ltnc.find_combinator_in_network_tree(entity, 10, true)
+  local combinator = ltnh.find_combinator_in_network_tree(entity, 10, true)
   if not combinator then
-    combinator = ltnc.find_combinator_in_network_tree(entity, 10, false)
+    combinator = ltnh.find_combinator_in_network_tree(entity, 10, false)
   end 
-  --local combinator = ltnc.find_combinator_in_area(entity, 5)
+  --local combinator = ltnh.find_combinator_in_area(entity, 5)
   if not combinator then return false end
   
   local obj = ltn_combinator:new(combinator)
@@ -145,7 +145,7 @@ ltnc.open_combinator = function(player_index, entity, register)
   
   register = register or false
   
-  local win = ltnc.gui.open(player_index, obj, register)
+  local win = ltnh.gui.open(player_index, obj, register)
   
   if register == true then
     game.players[player_index].opened = win
@@ -154,14 +154,14 @@ ltnc.open_combinator = function(player_index, entity, register)
   return true
 end
 
--- ltnc.close_combinator
-ltnc.close_combinator = function(player_index)
+-- ltnh.close_combinator
+ltnh.close_combinator = function(player_index)
   if not global.gui[player_index] then return false end
 
-  ltnc.gui.close(player_index)
+  ltnh.gui.close(player_index)
 end
 
 --[[ 
         THIS IS THE END  
 --]] ----------------------------------------------------------------------------------
-return ltnc
+return ltnh

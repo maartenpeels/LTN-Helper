@@ -9,12 +9,12 @@ local CHECK_DEPOT     = 3
 local RADIO_ON        = 4
 local RADIO_OFF       = 5
 
-local _prefix = "ltnc_"
+local _prefix = "ltnh_"
 
 
 global.gui = global.gui or {}
 
-ltnc_gui = {
+ltnh_gui = {
 }
 
 --[[ ----------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ ltnc_gui = {
 --]] 
 local function exists(player_index)
   if not global.gui[player_index] or not global.gui[player_index].main_frame.valid then
-    global.gui[player_index] = ltnc_gui.build(game.players[player_index].gui.center)
+    global.gui[player_index] = ltnh_gui.build(game.players[player_index].gui.center)
     if game.active_mods["Teleporters"] ~= nil then
       print("Player #" .. player_index .." is not initialized or destroyed. Please report this message to the author.")
     end
@@ -62,85 +62,85 @@ end
 --[[ ----------------------------------------------------------------------------------
         MOD INITIALIZE 
 --]]
-ltnc_gui.mod_init = function()
+ltnh_gui.mod_init = function()
   -- build uis
   for player_index, player in pairs(game.players) do
-    ltnc_gui.on_player_joined({player_index = player_index})
+    ltnh_gui.on_player_joined({player_index = player_index})
   end
 end
 
-ltnc_gui.mod_configuration_changed = function()
+ltnh_gui.mod_configuration_changed = function()
   --dlog("LTNC: Mod updated. Rebuilding UIs")
   for player_index, player in pairs(game.players) do
     if global.gui[player_index] ~= nil and global.gui[player_index].main_frame ~= nil and global.gui[player_index].main_frame.valid == true then
       global.gui[player_index].main_frame.destroy()
     end
     global.gui[player_index] = nil
-    ltnc_gui.on_player_joined({player_index = player_index})
+    ltnh_gui.on_player_joined({player_index = player_index})
   end
 end
 
-ltnc_gui.mod_settings_changed = function()
+ltnh_gui.mod_settings_changed = function()
 end
 
-ltnc_gui.on_player_joined = function(event)
+ltnh_gui.on_player_joined = function(event)
   local player_index = event.player_index
   if global.gui[player_index] ~= nil then
-    log("ltnc::on_player_joined: Player #" .. player_index .. " already exists. Please report this message to the author.")
+    log("ltnh::on_player_joined: Player #" .. player_index .. " already exists. Please report this message to the author.")
     return
   end
   
   -- new player create gui
-  global.gui[player_index] = ltnc_gui.build(game.players[player_index].gui.center)
+  global.gui[player_index] = ltnh_gui.build(game.players[player_index].gui.center)
 end
 
-ltnc_gui.event_map = function(events)
+ltnh_gui.event_map = function(events)
   --[[ EVENT MAPS]]--
-  events.map_clicked["ltnc_checkRequester"]   = ltnc_gui.ltn_toggle_requester
-  events.map_clicked["ltnc_checkProvider"]    = ltnc_gui.ltn_toggle_provider
-  events.map_clicked["ltnc_checkDepot"]       = ltnc_gui.ltn_toggle_depot
-  events.map_clicked["ltnc_networkid_button"] = ltnc_gui.network_toggle
-  events.map_clicked["ltnc_radioOn"]          = ltnc_gui.misc_switch_on
-  events.map_clicked["ltnc_radioOff"]         = ltnc_gui.misc_switch_off
+  events.map_clicked["ltnh_checkRequester"]   = ltnh_gui.ltn_toggle_requester
+  events.map_clicked["ltnh_checkProvider"]    = ltnh_gui.ltn_toggle_provider
+  events.map_clicked["ltnh_checkDepot"]       = ltnh_gui.ltn_toggle_depot
+  events.map_clicked["ltnh_networkid_button"] = ltnh_gui.network_toggle
+  events.map_clicked["ltnh_radioOn"]          = ltnh_gui.misc_switch_on
+  events.map_clicked["ltnh_radioOff"]         = ltnh_gui.misc_switch_off
 
-  events.map_clicked["ltnc_network_button_all"]    = ltnc_gui.network_select_all
-  events.map_clicked["ltnc_network_button_none"]    = ltnc_gui.network_select_none
-  events.map_clicked["ltnc_network_button_config"] = ltnc_network.open
+  events.map_clicked["ltnh_network_button_all"]    = ltnh_gui.network_select_all
+  events.map_clicked["ltnh_network_button_none"]    = ltnh_gui.network_select_none
+  events.map_clicked["ltnh_network_button_config"] = ltnh_network.open
     
-  events.map_slider["ltnc_misc-slider_element"]      = ltnc_gui.misc_slider_changed
-  events.map_text_changed["ltnc_misc-text_element"]  = ltnc_gui.misc_text_changed
+  events.map_slider["ltnh_misc-slider_element"]      = ltnh_gui.misc_slider_changed
+  events.map_text_changed["ltnh_misc-text_element"]  = ltnh_gui.misc_text_changed
   
   -- ltn signals
   for name, entry in pairs(config.ltn_signals) do
     local key = _prefix .. name .. "_element"
     if entry.bounds.min == 0 and entry.bounds.max == 1 then
-      events.map_checked[key]  = ltnc_gui.ltn_checkbox_changed
+      events.map_checked[key]  = ltnh_gui.ltn_checkbox_changed
     else
-      events.map_text_changed[key]  = ltnc_gui.ltn_text_changed
+      events.map_text_changed[key]  = ltnh_gui.ltn_text_changed
     end
   end
 
   -- additional elements
   local key
-  for i=1, config.ltnc_misc_slot_count do
+  for i=1, config.ltnh_misc_slot_count do
     key = string.format(_prefix .. "misc-signal-button%d", i)
-    events.map_elem_changed[key] = ltnc_gui.misc_choose_element
+    events.map_elem_changed[key] = ltnh_gui.misc_choose_element
     
     key = string.format(_prefix .. "misc-signal-sprite%d", i)
-    events.map_clicked[key] = ltnc_gui.misc_signal_clicked
+    events.map_clicked[key] = ltnh_gui.misc_signal_clicked
   end
   
   -- network id buttons
   for i=1, 32 do
-    key = string.format("ltnc_network_button%d", i)
-    events.map_clicked[key] = ltnc_gui.network_button_clicked
+    key = string.format("ltnh_network_button%d", i)
+    events.map_clicked[key] = ltnh_gui.network_button_clicked
   end
 end
 
 --[[ ----------------------------------------------------------------------------------
         LOGIC & HELPER 
 --]]
-ltnc_gui.open = function(player_index, combinator, registered)
+ltnh_gui.open = function(player_index, combinator, registered)
   if not exists(player_index) then return nil end
     
   local window = global.gui[player_index]
@@ -172,28 +172,28 @@ ltnc_gui.open = function(player_index, combinator, registered)
     window.ltn.table.style.minimal_height = (global.default_entry_count + changes) * 38
   end
     
-  ltnc_gui.ltn_update_visibility(window)
+  ltnh_gui.ltn_update_visibility(window)
 
   -- update on/off switch
   local enabled = window.combinator:is_enabled()
   window.ltn.buttons[RADIO_ON].state = enabled
   window.ltn.buttons[RADIO_OFF].state = not enabled
   
-  ltnc_gui.misc_update_switch_onoff(window)
+  ltnh_gui.misc_update_switch_onoff(window)
   
   -- update additional signal slots
   window.selected_elem = nil
-  ltnc_gui.misc_update_inputs(window, nil)
+  ltnh_gui.misc_update_inputs(window, nil)
   
-  for slot = 1, config.ltnc_misc_slot_count do
+  for slot = 1, config.ltnh_misc_slot_count do
     local signal = window.combinator:get_slot(slot)
 
-    ltnc_gui.misc_update_signals(window.misc_signals[slot].button, window.misc_signals[slot].sprite, signal)
+    ltnh_gui.misc_update_signals(window.misc_signals[slot].button, window.misc_signals[slot].sprite, signal)
     -- reset style for this element
-    window.misc_signals[slot].sprite.style = "ltnc_misc_slot_empty"
+    window.misc_signals[slot].sprite.style = "ltnh_misc_slot_empty"
   end
   
-  ltnc_gui.build_network_ui(player_index, window.network)
+  ltnh_gui.build_network_ui(player_index, window.network)
   window.registered = registered
   window.opened = window.main_frame
   window.main_frame.style.left_margin = 0
@@ -201,12 +201,12 @@ ltnc_gui.open = function(player_index, combinator, registered)
   return window.main_frame
 end
 
-ltnc_gui.close = function(player_index)
+ltnh_gui.close = function(player_index)
   if not exists(player_index) then return end
   
   local window = global.gui[player_index]
 
-  if window.opened ~= nil and window.opened.name == "ltnc-network-config" then
+  if window.opened ~= nil and window.opened.name == "ltnh-network-config" then
     if global.network_ui[player_index] ~= nil then
       global.network_ui[player_index].destroy()
     end
@@ -219,12 +219,12 @@ ltnc_gui.close = function(player_index)
   window.main_frame.visible = false
 end
 
-ltnc_gui.is_visible = function(player_index)
+ltnh_gui.is_visible = function(player_index)
   if not exists(player_index) then return end
   return global.gui[player_index].main_frame.visible
 end
 
-ltnc_gui.is_registered = function(player_index)
+ltnh_gui.is_registered = function(player_index)
   if not exists(player_index) then return end
   return global.gui[player_index].main_frame.registered
 end
@@ -235,16 +235,16 @@ end
 
 -- ltn_apply_stop_type:
 --  
-ltnc_gui.ltn_apply_stop_type = function(event)
+ltnh_gui.ltn_apply_stop_type = function(event)
   local window     = global.gui[event.player_index]
-  local visibility = ltnc_gui.ltn_update_visibility(window)
+  local visibility = ltnh_gui.ltn_update_visibility(window)
   
-  ltnc_gui.ltn_apply_visible_signals(window, visibility)
+  ltnh_gui.ltn_apply_visible_signals(window, visibility)
 end
 
 -- ltn_toggle_requester
 --
-ltnc_gui.ltn_toggle_requester = function(event)
+ltnh_gui.ltn_toggle_requester = function(event)
   local window    = global.gui[event.player_index]
   local stop_type = window.combinator:get_stop_type()
   
@@ -271,12 +271,12 @@ ltnc_gui.ltn_toggle_requester = function(event)
   
   -- appply new stop type
   window.combinator:set_stop_type(new_stop_type)
-  ltnc_gui.ltn_apply_stop_type(event)
+  ltnh_gui.ltn_apply_stop_type(event)
 end
 
 -- ltn_toggle_provider:
 --
-ltnc_gui.ltn_toggle_provider = function(event)
+ltnh_gui.ltn_toggle_provider = function(event)
   local window    = global.gui[event.player_index]
   local stop_type = window.combinator:get_stop_type()
   
@@ -310,22 +310,22 @@ ltnc_gui.ltn_toggle_provider = function(event)
   
   -- appply new stop type
   window.combinator:set_stop_type(new_stop_type)
-  ltnc_gui.ltn_apply_stop_type(event)
+  ltnh_gui.ltn_apply_stop_type(event)
 end
 
 -- ltn_toggle_depot
 --
-ltnc_gui.ltn_toggle_depot = function(event)
+ltnh_gui.ltn_toggle_depot = function(event)
   local window = global.gui[event.player_index]
   
   -- switch to depot
   window.combinator:set_stop_type(config.LTN_STOP_DEPOT)
-  ltnc_gui.ltn_apply_stop_type(event)
+  ltnh_gui.ltn_apply_stop_type(event)
 end
 
 -- ltn_apply_visible_signals
 --
-ltnc_gui.ltn_apply_visible_signals = function(window, visibility)
+ltnh_gui.ltn_apply_visible_signals = function(window, visibility)
   for signal_name, entry in pairs(visibility) do
     if visibility[signal_name] ~= nil and visibility[signal_name] == true then
       local min   = config.ltn_signals[signal_name].bounds.min
@@ -345,7 +345,7 @@ end
 
 -- ltn_text_changed
 --
-ltnc_gui.ltn_text_changed = function(event)
+ltnh_gui.ltn_text_changed = function(event)
   local element = event.element
   local signal_name = string.match(element.name, "_([a-zA-Z-]+)_")
   
@@ -366,14 +366,14 @@ ltnc_gui.ltn_text_changed = function(event)
     global.gui[event.player_index].combinator:set(signal_name, value)
     
     if signal_name == "ltn-network-id" then
-      ltnc_gui.network_update_buttons(event, value)
+      ltnh_gui.network_update_buttons(event, value)
     end
   end
 end
 
 -- ltn_checkbox_changed
 --
-ltnc_gui.ltn_checkbox_changed = function(event)
+ltnh_gui.ltn_checkbox_changed = function(event)
   local element = event.element
   local signal_name = string.match(element.name, "_([a-zA-Z-]+)_")
   
@@ -383,7 +383,7 @@ end
 
 -- ltn_update_visibility
 --
-ltnc_gui.ltn_update_visibility = function (window)
+ltnh_gui.ltn_update_visibility = function (window)
   -- grab current stop type
   local stop_type = window.combinator:get_stop_type()
   if stop_type == nil then
@@ -477,7 +477,7 @@ end
 --[[ ----------------------------------------------------------------------------------
       NETWORK ID SELECTOR
 --]]
-ltnc_gui.network_toggle = function(event)
+ltnh_gui.network_toggle = function(event)
   local window = global.gui[event.player_index]
   
   window.network.frame.visible = not window.network.frame.visible
@@ -485,15 +485,15 @@ ltnc_gui.network_toggle = function(event)
   window.main_frame.style.left_margin = window.network.frame.visible and 253 or 0
 
   if event.element and event.element.type == "sprite-button" then
-    event.element.style = window.network.frame.visible and "ltnc_network_network_button_pressed" or "ltnc_network_network_button"
+    event.element.style = window.network.frame.visible and "ltnh_network_network_button_pressed" or "ltnh_network_network_button"
   end
   
   if window.network.frame.visible then
-    ltnc_gui.network_update_buttons(event)
+    ltnh_gui.network_update_buttons(event)
   end
 end
 
-ltnc_gui.network_button_clicked = function(event)
+ltnh_gui.network_button_clicked = function(event)
   local id = tonumber(string.match(event.element.name,"%d+"))
   if id == nil or id < 1 or id > 32 then return end
   
@@ -506,12 +506,12 @@ ltnc_gui.network_button_clicked = function(event)
     -- bit is set, unset
     encoded_id = bit32.bxor(encoded_id, 2^(id-1))
     
-    event.element.style = "ltnc_network_sprite_button"
+    event.element.style = "ltnh_network_sprite_button"
   else
     -- bit is unset, set
     encoded_id = bit32.bor(encoded_id, 2^(id-1))
     
-    event.element.style = "ltnc_network_sprite_button_pressed"
+    event.element.style = "ltnh_network_sprite_button_pressed"
   end
   
   -- if bit 32 is set, convert to a negative number
@@ -531,40 +531,40 @@ ltnc_gui.network_button_clicked = function(event)
   window.ltn.entries["ltn-network-id"].element.text = encoded_id
 end
 
-ltnc_gui.network_update_buttons = function(event)
+ltnh_gui.network_update_buttons = function(event)
   local window = global.gui[event.player_index]
   
   local encoded_id = window.combinator:get("ltn-network-id")
   for i=1, 32 do
     if window.network.buttons[i] then
       local bit  = (bit32.band(encoded_id, 2^(i-1)) > 0)
-      local name = string.format("ltnc_network_button%d", i)
+      local name = string.format("ltnh_network_button%d", i)
       
       if bit then
-        window.network.buttons[i].style = "ltnc_network_sprite_button_pressed"
+        window.network.buttons[i].style = "ltnh_network_sprite_button_pressed"
       else
-        window.network.buttons[i].style = "ltnc_network_sprite_button"
+        window.network.buttons[i].style = "ltnh_network_sprite_button"
       end
     end
   end
 end
 
-ltnc_gui.network_select_all = function(event)
+ltnh_gui.network_select_all = function(event)
   local window = global.gui[event.player_index]
 
   window.combinator:set("ltn-network-id", -1)
   window.ltn.entries["ltn-network-id"].element.text = -1
   
-  ltnc_gui.network_update_buttons(event)
+  ltnh_gui.network_update_buttons(event)
 end
 
-ltnc_gui.network_select_none = function(event)
+ltnh_gui.network_select_none = function(event)
   local window = global.gui[event.player_index]
 
   window.combinator:set("ltn-network-id", 0)
   window.ltn.entries["ltn-network-id"].element.text = 0
   
-  ltnc_gui.network_update_buttons(event)
+  ltnh_gui.network_update_buttons(event)
 end
 
 --[[ ----------------------------------------------------------------------------------
@@ -573,31 +573,31 @@ end
 
 -- misc_switch_on
 --
-ltnc_gui.misc_switch_on = function(event)
+ltnh_gui.misc_switch_on = function(event)
   local window = global.gui[event.player_index]
   
   window.combinator:set_enabled(true)
   
   window.ltn.buttons[RADIO_ON].state = true
   window.ltn.buttons[RADIO_OFF].state = false
-  ltnc_gui.misc_update_switch_onoff(window)
+  ltnh_gui.misc_update_switch_onoff(window)
 end
 
 -- misc_switch_off
 --
-ltnc_gui.misc_switch_off = function(event)
+ltnh_gui.misc_switch_off = function(event)
   local window = global.gui[event.player_index]
   
   window.combinator:set_enabled(false)
 
   window.ltn.buttons[RADIO_ON].state = false
   window.ltn.buttons[RADIO_OFF].state = true
-  ltnc_gui.misc_update_switch_onoff(window)
+  ltnh_gui.misc_update_switch_onoff(window)
 end
 
 -- misc_update_switch_onoff
 --
-ltnc_gui.misc_update_switch_onoff = function(window)
+ltnh_gui.misc_update_switch_onoff = function(window)
   if window.ltn.buttons[RADIO_ON].state == true then
     window.ltn.buttons[RADIO_ON].style.font = "default-bold"
     window.ltn.buttons[RADIO_ON].style.font_color = {255, 230, 192}
@@ -613,9 +613,9 @@ end
  
 -- misc_choose_element
 --
-ltnc_gui.misc_choose_element = function(event)
+ltnh_gui.misc_choose_element = function(event)
   local slot = tonumber(string.match(event.element.name,"%d+"))
-  if slot == nil or slot < 1 or slot > config.ltnc_misc_slot_count then return end
+  if slot == nil or slot < 1 or slot > config.ltnh_misc_slot_count then return end
 
   local window = global.gui[event.player_index]
   
@@ -627,28 +627,28 @@ ltnc_gui.misc_choose_element = function(event)
   }
   
   window.combinator:set_slot(slot, signal)
-  ltnc_gui.misc_update_inputs(window, signal.count)
-  ltnc_gui.misc_update_signals(window.misc_signals[slot].button, window.misc_signals[slot].sprite, signal)
-  ltnc_gui.misc_update_selection(window, window.misc_signals[slot].sprite, signal.count)
+  ltnh_gui.misc_update_inputs(window, signal.count)
+  ltnh_gui.misc_update_signals(window.misc_signals[slot].button, window.misc_signals[slot].sprite, signal)
+  ltnh_gui.misc_update_selection(window, window.misc_signals[slot].sprite, signal.count)
   
   window.element_focus = true
 end
 
 -- misc_signal_clicked
 --
-ltnc_gui.misc_signal_clicked = function(event)
+ltnh_gui.misc_signal_clicked = function(event)
   local slot = tonumber(string.match(event.element.name,"%d+"))
-  if slot == nil or slot < 1 or slot > config.ltnc_misc_slot_count then return end
+  if slot == nil or slot < 1 or slot > config.ltnh_misc_slot_count then return end
    
   local window = global.gui[event.player_index]
 
   -- Sprite-Button: check for rightclick -> remove entry
   if event.button == defines.mouse_button_type.right and event.element.type == "sprite-button" then
     window.combinator:remove_slot(slot)
-    ltnc_gui.misc_update_signals(window.misc_signals[slot].button, window.misc_signals[slot].sprite, nil)
+    ltnh_gui.misc_update_signals(window.misc_signals[slot].button, window.misc_signals[slot].sprite, nil)
     
     if window.selected_elem == event.element then
-      ltnc_gui.misc_update_selection(window, nil, nil)
+      ltnh_gui.misc_update_selection(window, nil, nil)
     end
     
     return
@@ -665,7 +665,7 @@ ltnc_gui.misc_signal_clicked = function(event)
     end
     
     -- update slider and textbox, value might be nil
-    ltnc_gui.misc_update_selection(window, new_element, value)
+    ltnh_gui.misc_update_selection(window, new_element, value)
     window.element_focus = true
     return 
   end
@@ -673,7 +673,7 @@ end
 
 -- misc_update_signals
 --
-ltnc_gui.misc_update_signals = function(button, sprite, signal)
+ltnh_gui.misc_update_signals = function(button, sprite, signal)
   if signal ~= nil and signal.signal ~= nil then
     sprite.visible = true
     button.visible = false
@@ -693,34 +693,34 @@ end
 
 -- misc_update_selection
 --
-ltnc_gui.misc_update_selection = function(window, new_element, value)
+ltnh_gui.misc_update_selection = function(window, new_element, value)
     -- either way, deselect current slot
     if window.selected_elem ~= nil then
-      window.selected_elem.style  = "ltnc_misc_slot_empty"
+      window.selected_elem.style  = "ltnh_misc_slot_empty"
     end
     
     if new_element ~= nil and new_element ~= window.selected_elem then
       -- make slot selected
-      new_element.style  = "ltnc_misc_slot_selected"
+      new_element.style  = "ltnh_misc_slot_selected"
     end
     
     window.selected_elem = new_element
     
     -- update slider and textbox, value might be nil
-    ltnc_gui.misc_update_inputs(window, value)
+    ltnh_gui.misc_update_inputs(window, value)
 end
 
 -- misc_slider_changed
 --
-ltnc_gui.misc_slider_changed = function(event)
-  if not ltnc_gui.is_visible(event.player_index) then return end
-  if not event.element or event.element.name ~= "ltnc_misc-slider_element" then return end
+ltnh_gui.misc_slider_changed = function(event)
+  if not ltnh_gui.is_visible(event.player_index) then return end
+  if not event.element or event.element.name ~= "ltnh_misc-slider_element" then return end
   
   local window = global.gui[event.player_index]
   if window.selected_elem == nil then return end
   
   local slot = tointeger(window.selected_elem.name, 1, 100)
-  if slot == nil or slot < 1 or slot > config.ltnc_misc_slot_count then return end
+  if slot == nil or slot < 1 or slot > config.ltnh_misc_slot_count then return end
   
   local value  = math.floor(event.element.slider_value)
   if value >= 9 then
@@ -735,15 +735,15 @@ ltnc_gui.misc_slider_changed = function(event)
   window.element_focus = true
 end
 
--- ltnc_gui.misc_text_changed(event):
+-- ltnh_gui.misc_text_changed(event):
 --  event listener for textfield, sets the value for the currently selected 
 --  signal in a combinator
-ltnc_gui.misc_text_changed = function(event)
+ltnh_gui.misc_text_changed = function(event)
   local window = global.gui[event.player_index]
   if window.selected_elem == nil then return end
   
   local slot = tointeger(window.selected_elem.name, 1, 100)
-  if slot == nil or slot < 1 or slot > config.ltnc_misc_slot_count then return end
+  if slot == nil or slot < 1 or slot > config.ltnh_misc_slot_count then return end
   
   -- validate input
   local value = tointeger(strip_input(event.element.text), -2000000000, 2000000000)
@@ -763,7 +763,7 @@ end
 
 -- misc_update_inputs
 --
-ltnc_gui.misc_update_inputs = function(window, value)
+ltnh_gui.misc_update_inputs = function(window, value)
   if value == nil then
     window.misc.slider.visible = false
     window.misc.text.visible = false
@@ -781,8 +781,8 @@ ltnc_gui.misc_update_inputs = function(window, value)
   window.misc.text.text    = value
 end
 
-ltnc_gui.on_tab_key = function(event)
-  if not ltnc_gui.is_visible(event.player_index) then return end
+ltnh_gui.on_tab_key = function(event)
+  if not ltnh_gui.is_visible(event.player_index) then return end
   
   local window = global.gui[event.player_index]
   
@@ -806,11 +806,11 @@ end
         GRAPHICAL USER INTERFACE  
 --]]
 
-ltnc_gui.build = function(parent)
+ltnh_gui.build = function(parent)
   local main_frame, combinator_frame 
   local element, container
   
-  main_frame = parent.add {type="flow", name="ltnc-main-container", direction="horizontal"}
+  main_frame = parent.add {type="flow", name="ltnh-main-container", direction="horizontal"}
   main_frame.style.margin = 0
   main_frame.style.padding = 0
   main_frame.style.horizontal_spacing=3
@@ -837,18 +837,18 @@ ltnc_gui.build = function(parent)
   network.frame.style.minimal_width = 250
   network.frame.visible = false
   
-  container = network.frame.add {type="frame", caption={"virtual-signal-name.ltn-network-id"}, direction="horizontal", style="ltnc_network_frame"}
-  container.add {type = "button", name="ltnc_network_button_all", style="ltnc_network_button_all", caption={"ltnc.ltnc-all"}}
-  container.add {type = "button", name="ltnc_network_button_none", style="ltnc_network_button_all", caption={"ltnc.ltnc-none"}}
-  container.add {type = "sprite-button", name="ltnc_network_button_config", style="ltnc_network_button_config", sprite="item/iron-gear-wheel"}
+  container = network.frame.add {type="frame", caption={"virtual-signal-name.ltn-network-id"}, direction="horizontal", style="ltnh_network_frame"}
+  container.add {type = "button", name="ltnh_network_button_all", style="ltnh_network_button_all", caption={"ltnh.ltnh-all"}}
+  container.add {type = "button", name="ltnh_network_button_none", style="ltnh_network_button_all", caption={"ltnh.ltnh-none"}}
+  container.add {type = "sprite-button", name="ltnh_network_button_config", style="ltnh_network_button_config", sprite="item/iron-gear-wheel"}
   
-  container = network.frame.add {type="frame", direction = "vertical", style="ltnc_network_frame"}
+  container = network.frame.add {type="frame", direction = "vertical", style="ltnh_network_frame"}
   network.table = container.add {type="table", column_count=6}
   network.table.style.horizontal_spacing = 5
   network.table.style.vertical_spacing = 5
   
   --[[ Upper Combinator Frame ]]--
-  local upper_frame = combinator_frame.add {type="frame", caption={"entity-name.ltn-combinator"}, direction="vertical", style="ltnc_frame_style"}
+  local upper_frame = combinator_frame.add {type="frame", caption={"entity-name.ltn-combinator"}, direction="vertical", style="ltnh_frame_style"}
   upper_frame.style.horizontally_stretchable = true
   
   --[[ RadioButton Group ]]--
@@ -857,13 +857,13 @@ ltnc_gui.build = function(parent)
   container.style.horizontally_stretchable = true
   
   local checkbuttons = {}
-  checkbuttons[CHECK_REQUESTER] = container.add {type = "checkbox", name = _prefix .. "checkRequester", caption = {"ltnc.ltn-stop-requester"}, style="ltnc_checkbox_style", state = true}
-  checkbuttons[CHECK_REQUESTER].tooltip = {"ltnc.ltnc-toggle-requester"}
+  checkbuttons[CHECK_REQUESTER] = container.add {type = "checkbox", name = _prefix .. "checkRequester", caption = {"ltnh.ltn-stop-requester"}, style="ltnh_checkbox_style", state = true}
+  checkbuttons[CHECK_REQUESTER].tooltip = {"ltnh.ltnh-toggle-requester"}
   --checkbuttons[CHECK_REQUESTER].style.width=190
-  checkbuttons[CHECK_PROVIDER]  = container.add {type = "checkbox", name = _prefix .. "checkProvider", caption =  {"ltnc.ltn-stop-provider"}, style="ltnc_checkbox_style", state = false}
-  checkbuttons[CHECK_PROVIDER].tooltip = {"ltnc.ltnc-toggle-provider"}
-  checkbuttons[CHECK_DEPOT]     = container.add {type = "checkbox", name = _prefix .. "checkDepot", caption = {"ltnc.ltn-stop-depot"}, style="ltnc_checkbox_style", state = false}
-  checkbuttons[CHECK_DEPOT].tooltip = {"ltnc.ltnc-toggle-depot"}
+  checkbuttons[CHECK_PROVIDER]  = container.add {type = "checkbox", name = _prefix .. "checkProvider", caption =  {"ltnh.ltn-stop-provider"}, style="ltnh_checkbox_style", state = false}
+  checkbuttons[CHECK_PROVIDER].tooltip = {"ltnh.ltnh-toggle-provider"}
+  checkbuttons[CHECK_DEPOT]     = container.add {type = "checkbox", name = _prefix .. "checkDepot", caption = {"ltnh.ltn-stop-depot"}, style="ltnh_checkbox_style", state = false}
+  checkbuttons[CHECK_DEPOT].tooltip = {"ltnh.ltnh-toggle-depot"}
   
   --[[ LTN Settings ]]--
   local ltn_table = upper_frame.add {type="table", column_count=3}
@@ -875,19 +875,19 @@ ltnc_gui.build = function(parent)
     local tmp_entry = {}
     
     if name == "ltn-network-id" then
-      tmp_entry.sprite = ltn_table.add {type="sprite-button",   name=_prefix .."networkid_button",  style="ltnc_network_network_button", sprite="virtual-signal/" .. name}
+      tmp_entry.sprite = ltn_table.add {type="sprite-button",   name=_prefix .."networkid_button",  style="ltnh_network_network_button", sprite="virtual-signal/" .. name}
       network.toggle_button = tmp_entry.sprite
     else
       -- {element suffix, virtual signal, caption, default value}
-      tmp_entry.sprite  = ltn_table.add {type="sprite",   name=_prefix .. name .. "_sprite", style="ltnc_entry_sprite", sprite="virtual-signal/" .. name}
+      tmp_entry.sprite  = ltn_table.add {type="sprite",   name=_prefix .. name .. "_sprite", style="ltnh_entry_sprite", sprite="virtual-signal/" .. name}
     end
-    tmp_entry.label   = ltn_table.add {type="label",    name=_prefix .. name .. "_label",  style="ltnc_entry_label", caption={"virtual-signal-name." .. name}}
+    tmp_entry.label   = ltn_table.add {type="label",    name=_prefix .. name .. "_label",  style="ltnh_entry_label", caption={"virtual-signal-name." .. name}}
     
     if name == "ltn-disable-warnings" then
       local state = signal.default > 0 or false
-      tmp_entry.element = ltn_table.add {type="checkbox", name=_prefix .. name .. "_element", style="ltnc_entry_checkbox", state=state}
+      tmp_entry.element = ltn_table.add {type="checkbox", name=_prefix .. name .. "_element", style="ltnh_entry_checkbox", state=state}
     else
-      tmp_entry.element = ltn_table.add {type="textfield", name=_prefix .. name .. "_element", style="ltnc_entry_text", text=signal.default, numeric=true, allow_decimal=false, allow_negative=false}
+      tmp_entry.element = ltn_table.add {type="textfield", name=_prefix .. name .. "_element", style="ltnh_entry_text", text=signal.default, numeric=true, allow_decimal=false, allow_negative=false}
       
       if signal.bounds.min < 0 then
         tmp_entry.element.allow_negative=true
@@ -904,7 +904,7 @@ ltnc_gui.build = function(parent)
   }
   
   --[[ Lower Combinator Frame ]]--
-  local lower_frame = combinator_frame.add {type="frame", direction = "vertical", style="ltnc_frame_style"}
+  local lower_frame = combinator_frame.add {type="frame", direction = "vertical", style="ltnh_frame_style"}
   lower_frame.style.horizontally_stretchable = true
 
   --[[ Caption && On/Off Switch ]]--
@@ -913,12 +913,12 @@ ltnc_gui.build = function(parent)
   container.style.horizontally_stretchable = true
   container.style.left_margin = 10
   
-  element = container.add {type="label", caption={"ltnc.ltnc-output"}, style="heading_3_label"}
+  element = container.add {type="label", caption={"ltnh.ltnh-output"}, style="heading_3_label"}
   element.style.horizontally_stretchable = true
-  checkbuttons[RADIO_ON]  = container.add {type = "radiobutton", name = _prefix .. "radioOn",  caption = {"ltnc.ltnc-on"}, state = true}
+  checkbuttons[RADIO_ON]  = container.add {type = "radiobutton", name = _prefix .. "radioOn",  caption = {"ltnh.ltnh-on"}, state = true}
   checkbuttons[RADIO_ON].style.horizontally_stretchable = false
   checkbuttons[RADIO_ON].style.right_padding = 10
-  checkbuttons[RADIO_OFF] = container.add {type = "radiobutton", name = _prefix .. "radioOff", caption = {"ltnc.ltnc-off"}, state = false}
+  checkbuttons[RADIO_OFF] = container.add {type = "radiobutton", name = _prefix .. "radioOff", caption = {"ltnh.ltnh-off"}, state = false}
   checkbuttons[RADIO_OFF].style.horizontally_stretchable = false
   checkbuttons[RADIO_OFF].style.right_padding = 0
   
@@ -927,13 +927,13 @@ ltnc_gui.build = function(parent)
   container.style.left_margin = 10
   
   local misc_signals = {}
-  for i=1, config.ltnc_misc_slot_count do
+  for i=1, config.ltnh_misc_slot_count do
     misc_signals[i] = {sprite = nil, button = nil}
     misc_signals[i].sprite =
         container.add({
           name = string.format(_prefix .. "misc-signal-sprite%d", i),
           type = "sprite-button",
-          style = "ltnc_misc_slot_empty",
+          style = "ltnh_misc_slot_empty",
         })
     misc_signals[i].sprite.visible = true
     
@@ -941,7 +941,7 @@ ltnc_gui.build = function(parent)
         container.add({
           name = string.format(_prefix .. "misc-signal-button%d", i),
           type = "choose-elem-button",
-          style = "ltnc_misc_slot_empty",
+          style = "ltnh_misc_slot_empty",
           elem_type = "signal",
         })
   end 
@@ -958,7 +958,7 @@ ltnc_gui.build = function(parent)
   misc_slider.style.horizontally_stretchable = true
   misc_slider.style.right_padding = 10
   
-  local misc_text   = container.add {type="textfield", name=_prefix .. "misc-text_element", style="ltnc_entry_text", numeric=true, text=0, allow_decimal=false, allow_negative=true} 
+  local misc_text   = container.add {type="textfield", name=_prefix .. "misc-text_element", style="ltnh_entry_text", numeric=true, text=0, allow_decimal=false, allow_negative=true} 
   
   main_frame.visible = false
   
@@ -971,7 +971,7 @@ ltnc_gui.build = function(parent)
   return {main_frame = main_frame, network = network, ltn = ltn, misc_signals = misc_signals, misc = misc}
 end
 
-ltnc_gui.build_network_ui = function(player_index, network) 
+ltnh_gui.build_network_ui = function(player_index, network) 
   local container, element
 
   network.buttons = {}
@@ -979,24 +979,24 @@ ltnc_gui.build_network_ui = function(player_index, network)
 
   for i = 1, 32 do
     -- add a spritebutton
-    local key = string.format("ltnc_network_button%d", i)
+    local key = string.format("ltnh_network_button%d", i)
     if global.network_icons[i] ~= nil then
       local type   = global.network_icons[i].type
       local name = global.network_icons[i].name
       
-      network.buttons[i] = network.table.add {type="sprite-button", name = key, sprite = type .. "/" .. name, style = "ltnc_network_sprite_button"}  
+      network.buttons[i] = network.table.add {type="sprite-button", name = key, sprite = type .. "/" .. name, style = "ltnh_network_sprite_button"}  
       
     -- add a normal button
     else
-      network.buttons[i] = network.table.add {type = "button", name = key, caption=i, style = "ltnc_network_sprite_button"}
+      network.buttons[i] = network.table.add {type = "button", name = key, caption=i, style = "ltnh_network_sprite_button"}
     end
   end
   
   network.frame.visible = false
-  network.toggle_button.style = "ltnc_network_network_button"
+  network.toggle_button.style = "ltnh_network_network_button"
 end 
 
 --[[ 
         THIS IS THE END  
 --]] ----------------------------------------------------------------------------------
-return ltnc_gui
+return ltnh_gui

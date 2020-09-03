@@ -11,7 +11,7 @@ else
   )
 end
 
-local upgradable = settings.startup["ltnc-upgradable"].value
+local upgradable = settings.startup["ltnh-upgradable"].value
 if upgradable == nil then
   upgradable = true
 end

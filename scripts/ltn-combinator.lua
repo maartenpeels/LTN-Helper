@@ -43,7 +43,7 @@ function ltn_combinator:_parse_entity()
 
   -- check if signals are sorted correctly
   local need_sorting = false
-  for slot = 1, config.ltnc_item_slot_count do
+  for slot = 1, config.ltnh_item_slot_count do
     if control.get_signal(slot).signal ~= nil then
       local signal = control.get_signal(slot)
       local type = signal.signal.type
@@ -60,14 +60,14 @@ function ltn_combinator:_parse_entity()
       end
       
       -- check if a non ltn signal is in slot 1..13
-      if slot <= config.ltnc_ltn_slot_count and config.ltn_signals[name] == nil then
+      if slot <= config.ltnh_ltn_slot_count and config.ltn_signals[name] == nil then
         need_sorting = true
       end
     end
   end
   
   if need_sorting == true then 
-    --dlog("ltnc::_parse_entity: combinator needs sorting of signals")
+    --dlog("ltnh::_parse_entity: combinator needs sorting of signals")
     self:_sort_signal_slots()
   end
   
@@ -113,7 +113,7 @@ function ltn_combinator:_sort_signal_slots()
   
   -- cache all signals
   local previous = {}
-  for slot = 1, config.ltnc_item_slot_count do
+  for slot = 1, config.ltnh_item_slot_count do
     local signal = control.get_signal(slot)
     
     if signal ~= nil and signal.signal ~= nil then
@@ -125,7 +125,7 @@ function ltn_combinator:_sort_signal_slots()
   
   -- reassign all signals to a proper slot
   local ltn_slot  = 1
-  local misc_slot = config.ltnc_ltn_slot_count + 1
+  local misc_slot = config.ltnh_ltn_slot_count + 1
   for k, signal in pairs(previous) do
     local type = signal.signal.type
     local name = signal.signal.name
@@ -148,7 +148,7 @@ function ltn_combinator:_validate_signals()
   
   -- Stop DEPOT: Remove every signal but ltn-network-id (slot 1) and ltn-depot (last slot)
   if self.ltn_stop_type == config.LTN_STOP_DEPOT then
-    for slot=2, config.ltnc_ltn_slot_count-1 do
+    for slot=2, config.ltnh_ltn_slot_count-1 do
       control.set_signal(slot, nil)
     end
   
@@ -301,10 +301,10 @@ function ltn_combinator:remove_slot(slot)
 end
 
 function ltn_combinator:_validate_slot(slot)
-  slot = slot + config.ltnc_ltn_slot_count
+  slot = slot + config.ltnh_ltn_slot_count
 
   -- make sure slot is a valid number for an non-ltn signal
-  if slot <= config.ltnc_ltn_slot_count or slot > config.ltnc_item_slot_count then
+  if slot <= config.ltnh_ltn_slot_count or slot > config.ltnh_item_slot_count then
     dlog("Invalid slot number #" .. slot)
     return -1
   end
@@ -343,7 +343,7 @@ function ltn_combinator:mark_visibility(visibility)
   local control      = self.entity.get_or_create_control_behavior()
   
   local changes = 0
-  for slot=1,config.ltnc_ltn_slot_count do
+  for slot=1,config.ltnh_ltn_slot_count do
     local signal = control.get_signal(slot)
     
     if signal ~= nil and signal.signal ~= nil and signal.signal.name ~= "ltn-depot" then

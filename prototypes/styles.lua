@@ -1,5 +1,5 @@
 -- [[ CORE STYLES ]] --
-data.raw["gui-style"].default["ltnc_frame_style"] = {
+data.raw["gui-style"].default["ltnh_frame_style"] = {
   type   = "frame_style",
   parent = "frame",
   graphical_set = {
@@ -12,7 +12,7 @@ data.raw["gui-style"].default["ltnc_frame_style"] = {
   vertical_flow_style = { type = "vertical_flow_style", padding=0, top_padding=5, bottom_padding=5, vertical_spacing=10},
 }
 
-data.raw["gui-style"].default["ltnc_checkbox_style"] = {
+data.raw["gui-style"].default["ltnh_checkbox_style"] = {
   type   = "checkbox_style",
   parent = "checkbox",
   font = "default-semibold",
@@ -21,7 +21,7 @@ data.raw["gui-style"].default["ltnc_checkbox_style"] = {
 }
 
 -- [[ LTN STYLES ]] --
-data.raw["gui-style"].default["ltnc_entry_sprite"] = {
+data.raw["gui-style"].default["ltnh_entry_sprite"] = {
   type   = "image_style",
   parent = "image",
   size = 32,
@@ -29,20 +29,20 @@ data.raw["gui-style"].default["ltnc_entry_sprite"] = {
   stretch_image_to_widget_size = true,
 }
 
-data.raw["gui-style"].default["ltnc_entry_label"] = {
+data.raw["gui-style"].default["ltnh_entry_label"] = {
   type   = "label_style",
   parent = "caption_label",
   horizontally_stretchable = "on",
 }
 
-data.raw["gui-style"].default["ltnc_entry_text"] = {
+data.raw["gui-style"].default["ltnh_entry_text"] = {
   type   = "textbox_style",
   parent = "short_number_textfield",
   horizontal_align = "right",
   horizontally_stretchable = "off",
 }
 
-data.raw["gui-style"].default["ltnc_entry_checkbox"] = {
+data.raw["gui-style"].default["ltnh_entry_checkbox"] = {
   type   = "checkbox_style",
   parent = "checkbox",
   left_margin = 34,
@@ -50,29 +50,29 @@ data.raw["gui-style"].default["ltnc_entry_checkbox"] = {
 }
 
 -- [[ MISC STYLES ]] --
-data.raw["gui-style"].default["ltnc_misc_slot_empty"] = {
+data.raw["gui-style"].default["ltnh_misc_slot_empty"] = {
   type   = "button_style",
   parent = "logistic_slot_button",
 }
 
-data.raw["gui-style"].default["ltnc_misc_slot_selected"] = {
+data.raw["gui-style"].default["ltnh_misc_slot_selected"] = {
   type   = "button_style",
   parent = "slot_button",
 }
 
 -- [[ NETWORK STYLES ]] --
-data.raw["gui-style"].default["ltnc_network_frame"] = {
+data.raw["gui-style"].default["ltnh_network_frame"] = {
   type = "frame_style",
-  parent = "ltnc_frame_style",
+  parent = "ltnh_frame_style",
   title_style = {
     type = "label_style",
-    parent = "ltnc_network_frame_title",
+    parent = "ltnh_network_frame_title",
   },
   horizontal_flow_style = { type = "horizontal_flow_style", padding=0, top_padding=5, bottom_padding=5},
   vertical_flow_style = { type = "vertical_flow_style", padding=0, top_padding=5, bottom_padding=5},
 }
 
-data.raw["gui-style"].default["ltnc_network_frame_title"] = {
+data.raw["gui-style"].default["ltnh_network_frame_title"] = {
   type = "label_style",
   parent = "label",
   font = "heading-2",
@@ -83,7 +83,7 @@ data.raw["gui-style"].default["ltnc_network_frame_title"] = {
   right_padding = 0,
 }
 
-data.raw["gui-style"].default["ltnc_network_button_all"] = {
+data.raw["gui-style"].default["ltnh_network_button_all"] = {
   type = "button_style",
   parent = "shortcut_bar_button",
   font = "default-small",
@@ -92,7 +92,7 @@ data.raw["gui-style"].default["ltnc_network_button_all"] = {
   height = 28,
 }
 
-data.raw["gui-style"].default["ltnc_network_button_config"] = {
+data.raw["gui-style"].default["ltnh_network_button_config"] = {
   type = "button_style",
   parent = "shortcut_bar_button",
   font = "default-small",
@@ -100,21 +100,21 @@ data.raw["gui-style"].default["ltnc_network_button_config"] = {
   size = 28
 }
 
-data.raw["gui-style"].default["ltnc_network_network_button"] = {
+data.raw["gui-style"].default["ltnh_network_network_button"] = {
   type = "button_style",
   parent = "shortcut_bar_button",
   padding = 2,
   size = 32
 }
 
-data.raw["gui-style"].default["ltnc_network_network_button_pressed"] = {
+data.raw["gui-style"].default["ltnh_network_network_button_pressed"] = {
   type = "button_style",
-  parent = "ltnc_network_network_button",
+  parent = "ltnh_network_network_button",
   default_graphical_set = data.raw["gui-style"].default["button"]["selected_graphical_set"],
   hovered_graphical_set = data.raw["gui-style"].default["button"]["selected_hovered_graphical_set"],
 }
 
-data.raw["gui-style"].default["ltnc_network_sprite_button"] = {
+data.raw["gui-style"].default["ltnh_network_sprite_button"] = {
   type = "button_style",
   parent = "shortcut_bar_button",
   padding = 2,
@@ -122,9 +122,9 @@ data.raw["gui-style"].default["ltnc_network_sprite_button"] = {
   font = "default-small",
 }
 
-data.raw["gui-style"].default["ltnc_network_sprite_button_pressed"] = {
+data.raw["gui-style"].default["ltnh_network_sprite_button_pressed"] = {
   type = "button_style",
-  parent = "ltnc_network_sprite_button",
+  parent = "ltnh_network_sprite_button",
   default_graphical_set = data.raw["gui-style"].default["button"]["selected_graphical_set"],
   hovered_graphical_set = data.raw["gui-style"].default["button"]["selected_hovered_graphical_set"],
 }

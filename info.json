@@ -1,15 +1,11 @@
 {
-  "name": "LTN_Combinator_1_0",
-  "version": "0.6.3",
-  "title": "LTN Combinator for 1.0",
+  "name": "LTN_Helper",
+  "version": "0.1.0",
+  "title": "LTN Helper",
   "author": "maartenpeels",
   "contact": "",
   "homepage": "",
-  "factorio_version": "0.18",
-  "dependencies": [
-    "base >= 0.18.13",
-    "LogisticTrainNetwork >= 1.12.0",
-    "?LTN_Tracker >= 0.9.4"
-  ],
-  "description": "Adds a new type of Constant Combinators to the game. They come with a custom GUI to ease the control of LTN signals."
+  "factorio_version": "1.0",
+  "dependencies": ["base >= 1.0.0", "LogisticTrainNetwork >= 1.14.0"],
+  "description": "Adds a new type of Constant Combinator to the game. It comes with a custom GUI to ease the control of LTN signals."
 }
