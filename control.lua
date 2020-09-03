@@ -11,7 +11,7 @@ global.ltn_version_notice = global.ltn_version_notice or false
 MOD_NAME    = "LTN_Helper" 
 MOD_STRING  = "LTN Helper"
 MOD_TOKEN   = "LTNC"
-MOD_VERSION = "0.6.3"
+MOD_VERSION = "0.1.0"
 
 LTN_MOD_NAME    = "LogisticTrainNetwork"
 LTN_MOD_VERSION = "1.12.0"
