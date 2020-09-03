@@ -18,7 +18,7 @@ data:extend({
         name = "provide-type",
         setting_type = "runtime-global",
         order = "ac",
-        default_value = "only-item-count",
+        default_value = "only-stack-count",
         allowed_values = {"only-item-count", "both-item-stack", "only-stack-count"}
     },
     {
@@ -47,7 +47,7 @@ data:extend({
         name = "show-ltn-max-trains",
         order = "sd",
         setting_type = "runtime-global",
-        default_value = false
+        default_value = true
     },
     {
         type = "bool-setting",
