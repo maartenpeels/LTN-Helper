@@ -13,4 +13,4 @@ jobs:
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.4.1
         with:
-          filename: 'LTN_Helper_${{ INPUT_VERSION }}.zip'
+          filename: 'LTN_Helper_${{ inputs.version }}.zip'
