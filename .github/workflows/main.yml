@@ -1,0 +1,16 @@
+name: Create Release
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'     
+        required: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.4.1
+        with:
+          filename: 'LTN_Helper_${{ INPUT_VERSION }}.zip'
