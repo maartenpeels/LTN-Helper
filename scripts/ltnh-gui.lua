@@ -155,7 +155,7 @@ ltnh_gui.open = function(player_index, combinator, registered)
       if window.ltn.entries[name].element.type == "checkbox" then
         window.ltn.entries[name].element.state = value > 0 or false
       else
-        window.ltn.entries[name].element.text = value
+        window.ltn.entries[name].element.text = tostring(value)
       end
     end
   end
@@ -304,7 +304,7 @@ ltnh_gui.ltn_toggle_provider = function(event)
   if bit32.band(new_stop_type, config.LTN_STOP_PROVIDER) then
     local threshold = window.ltn.entries["ltn-provider-threshold"].element.text
     if threshold == tostring(config.high_threshold_count) then
-      window.ltn.entries["ltn-provider-threshold"].element.text = config.ltn_signals["ltn-provider-threshold"].default
+      window.ltn.entries["ltn-provider-threshold"].element.text = tostring(config.ltn_signals["ltn-provider-threshold"].default)
     end
   end
   
@@ -778,7 +778,7 @@ ltnh_gui.misc_update_inputs = function(window, value)
   
   window.misc.slider.visible = true
   window.misc.text.visible = true
-  window.misc.text.text    = value
+  window.misc.text.text    = tostring(value)
 end
 
 ltnh_gui.on_tab_key = function(event)
