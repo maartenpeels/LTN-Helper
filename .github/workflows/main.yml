@@ -15,3 +15,9 @@ jobs:
         uses: TheDoctor0/zip-release@0.4.1
         with:
           filename: 'LTN_Helper_${{ github.event.inputs.version }}.zip'
+      - name: Upload Release
+        uses: ncipollo/release-action@v1
+        with:
+          name: '${{ github.event.inputs.version }}'
+          artifacts: 'LTN_Helper_${{ github.event.inputs.version }}.zip'
+          token: ${{ secrets.GITHUB_TOKEN }}
