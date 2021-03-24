@@ -18,6 +18,6 @@ jobs:
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
-          name: '${{ github.event.inputs.version }}'
+          tag: '${{ github.event.inputs.version }}'
           artifacts: 'LTN_Helper_${{ github.event.inputs.version }}.zip'
           token: ${{ secrets.GITHUB_TOKEN }}
